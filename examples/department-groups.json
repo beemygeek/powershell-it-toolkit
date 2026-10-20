@@ -1,0 +1,5 @@
+{
+  "Finance": ["GG-Finance-Users", "GG-SharePoint-Finance", "GG-VPN-Users"],
+  "IT": ["GG-IT-Users", "GG-HelpDesk-Tier1", "GG-VPN-Users"],
+  "Operations": ["GG-Operations-Users", "GG-SharePoint-Operations"]
+}

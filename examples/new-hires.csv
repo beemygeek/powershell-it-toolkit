@@ -1,0 +1,4 @@
+FirstName,LastName,Department,Title,Manager,OU
+Jordan,Rivera,Finance,Staff Accountant,mchen,"OU=Finance,OU=Staff,DC=contoso,DC=com"
+Avery,Thompson,IT,Help Desk Technician,dpatel,"OU=IT,OU=Staff,DC=contoso,DC=com"
+Sam,O'Neil,Operations,Logistics Coordinator,kwalker,"OU=Operations,OU=Staff,DC=contoso,DC=com"
