@@ -11,6 +11,16 @@ Every script:
 - leaves an **audit trail** (CSV / JSON / log) suitable for attaching to a ticket
 - is parse-checked and linted with PSScriptAnalyzer on every push
 
+## Choose a starting point
+
+| Task | Start here | What to review |
+| --- | --- | --- |
+| Investigate an endpoint | [Endpoint health check](Endpoint/Get-EndpointHealth.ps1) | CIM session handling, health checks, and the returned Issues field. |
+| Investigate failed sign-ins | [Failed-logon report](Security/Get-FailedLogonReport.ps1) | Event XML parsing, failure reason decoding, and grouping by source and account. |
+| Review account provisioning | [User onboarding](ActiveDirectory/New-ADUserOnboarding.ps1) | CSV inputs, naming rules, group mapping, and the preview option. |
+
+For detection rules and the response workflow that follow an investigation, see the [SOC Security Lab](https://github.com/beemygeek/soc-security-lab).
+
 ## What's inside
 
 | Script | Category | What it solves |
