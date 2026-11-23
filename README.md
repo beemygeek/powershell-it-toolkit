@@ -4,12 +4,9 @@
 
 Practical PowerShell for **help desk, desktop support, and Windows/Active Directory administration** — the repetitive tickets and audits that eat a technician's day, scripted so they're done the same safe way every time.
 
-Every script:
+The scripts include comment-based help (`Get-Help .\Script.ps1 -Full`). Account changes and help desk fixes support `-WhatIf` previews. Output varies by script: provisioning exports CSV results, offboarding writes a JSON audit, quick fixes write a log, and reporting scripts return objects or formatted console output.
 
-- has full comment-based help (`Get-Help .\Script.ps1 -Full`)
-- supports **`-WhatIf`** wherever it changes anything
-- leaves an **audit trail** (CSV / JSON / log) suitable for attaching to a ticket
-- is parse-checked and linted with PSScriptAnalyzer on every push
+GitHub Actions parses the scripts and runs PSScriptAnalyzer on pushes and pull requests. These checks inspect syntax and static rules. Validate Windows, Active Directory, and remote execution behavior in a test environment before using a script for operational work.
 
 ## Choose a starting point
 
@@ -45,13 +42,20 @@ Get-ChildItem -Recurse *.ps1 | Unblock-File
 .\ActiveDirectory\New-ADUserOnboarding.ps1 -CsvPath .\examples\new-hires.csv `
     -UpnSuffix contoso.com -GroupMapPath .\examples\department-groups.json -WhatIf
 
-# Health check every machine in a list, show only the ones with problems
-Get-Content .\computers.txt | .\Endpoint\Get-EndpointHealth.ps1 |
+# Check the local computer first
+.\Endpoint\Get-EndpointHealth.ps1 | Format-List
+
+# Check several computers using your own hostnames
+'PC01', 'PC02' | .\Endpoint\Get-EndpointHealth.ps1 |
     Where-Object Issues | Format-Table ComputerName, Issues -Wrap
 
 # Morning help desk report
 .\ActiveDirectory\Get-PasswordExpiryReport.ps1 -WithinDays 7 | Format-Table
 ```
+
+The onboarding example requires the sample OU, manager, department groups, and UPN suffix to match your test directory. A preview still reads Active Directory and writes a results CSV.
+
+For endpoint checks, inspect the `Reachable` and `Issues` fields. Missing permissions or unavailable Windows components can affect the collected results.
 
 ## Requirements
 
@@ -62,9 +66,9 @@ Get-Content .\computers.txt | .\Endpoint\Get-EndpointHealth.ps1 |
 
 ## Design notes
 
-- **Least privilege.** Read-only reports never require more than read rights; only onboarding/offboarding change AD, and both are `-WhatIf`-able (offboarding asks for confirmation by default).
+- **Permissions follow the operation.** Active Directory changes require delegated rights. Endpoint checks and Security log access require the permissions listed above. Onboarding, offboarding, and quick fixes support previews.
 - **No secrets in files.** Temporary passwords come from a cryptographic RNG and are shown only on the technician's console — never written to the results CSV.
-- **Repeatable.** The same inputs produce the same result, which is what you want when an auditor asks "how do you offboard users?"
+- **Reviewable output.** Check per-account results and logs after each run. Provisioning depends on current directory state and generates a fresh temporary password for each created account.
 
 ## License
 
